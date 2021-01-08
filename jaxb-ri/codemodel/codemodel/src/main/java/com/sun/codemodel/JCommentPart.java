@@ -87,12 +87,12 @@ public class JCommentPart extends ArrayList<Object> {
                 while( (idx=s.indexOf('\n'))!=-1 ) {
                     String line = s.substring(0,idx);
                     if(line.length()>0)
-                        f.p(escape(line));
+                        f.p(line);
                     s = s.substring(idx+1);
                     f.nl().p(indent);
                 }
                 if(s.length()!=0)
-                    f.p(escape(s));
+                    f.p(s);
             } else
             if(o instanceof JClass) {
                 // TODO: this doesn't print the parameterized type properly
@@ -108,38 +108,4 @@ public class JCommentPart extends ArrayList<Object> {
             f.nl();
     }
 
-    /**
-     * Escapes the appearance of the comment terminator.
-     */
-    private String escape(String s) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            switch (c) {
-                case '<':
-                    sb.append("&lt;");
-                    break;
-                case '>':
-                    sb.append("&gt;");
-                    break;
-                case '@':
-                    sb.append("&#064;");
-                    break;
-                case '&':
-                    sb.append("&amp;");
-                    break;
-                case '*':
-                    sb.append(c);
-                    if (s.charAt(i+1) == '/') {
-                        sb.append("<!---->");
-                        sb.append('/');
-                        i++;
-                    }
-                    break;
-                default:
-                    sb.append(c);
-            }
-        }
-        return sb.toString();
-    }
 }

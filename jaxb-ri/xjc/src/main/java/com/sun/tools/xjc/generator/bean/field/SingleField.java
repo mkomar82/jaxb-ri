@@ -95,7 +95,7 @@ public class SingleField extends AbstractFieldWithVar {
 
         JMethod $get = writer.declareMethod( getterType,getGetterMethod() );
         String javadoc = prop.javadoc;
-        if(javadoc.length()==0)
+        if(javadoc == null || javadoc.length()==0)
             javadoc = Messages.DEFAULT_GETTER_JAVADOC.format(nc.toVariableName(prop.getName(true)));
         writer.javadoc().append(javadoc);
 

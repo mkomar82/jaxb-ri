@@ -34,6 +34,7 @@ import com.sun.tools.xjc.model.CNonElement;
 import com.sun.tools.xjc.reader.Ring;
 import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIProperty;
 import com.sun.tools.xjc.reader.xmlschema.bindinfo.BISchemaBinding;
+import com.sun.tools.xjc.reader.xmlschema.bindinfo.BindInfo;
 import com.sun.tools.xjc.reader.xmlschema.bindinfo.LocalScoping;
 import com.sun.xml.bind.v2.WellKnownNamespace;
 import com.sun.xml.xsom.XSComplexType;
@@ -288,7 +289,6 @@ public final class ClassSelector extends BindingComponent {
 
             // otherwise check if this component should become a class.
             CElement bean = sc.apply(classBinder);
-
             if( isGlobal )
                 popClassScope();
 
@@ -309,6 +309,18 @@ public final class ClassSelector extends BindingComponent {
                         getErrorReporter().error(referer.getLocator(),
                             Messages.ERR_REFERENCE_TO_NONEXPORTED_CLASS_REFERER, referer.apply( new ComponentNameFunction() ) );
                 }
+                
+                final Object annotation;
+                if(referer != null && referer.getAnnotation() != null && referer.getAnnotation().getAnnotation() != null) {
+                	annotation = referer.getAnnotation().getAnnotation();
+                }else if(sc.getAnnotation() != null && sc.getAnnotation().getAnnotation() != null ) {
+                	annotation = sc.getAnnotation().getAnnotation();
+                } else {
+                	annotation = null;
+                }
+                if(annotation instanceof BindInfo) {
+            		((CClassInfo)bean).javadoc = ((BindInfo)annotation).getDocumentation();
+            	}
             }
 
 

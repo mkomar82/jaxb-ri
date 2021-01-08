@@ -22,6 +22,7 @@ import com.sun.tools.xjc.model.CClassInfo;
 import com.sun.tools.xjc.model.CPropertyInfo;
 import com.sun.tools.xjc.model.CReferencePropertyInfo;
 import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIProperty;
+import com.sun.tools.xjc.reader.xmlschema.bindinfo.BindInfo;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSModelGroup;
 import com.sun.xml.xsom.XSModelGroupDecl;
@@ -337,6 +338,13 @@ final class DefaultParticleBinder extends ParticleBinder {
                 BIProperty cust = BIProperty.getCustomization(p);
                 CPropertyInfo prop = cust.createElementOrReferenceProperty(
                     getLabel(p), false, p, RawTypeSetBuilder.build(p,insideOptionalParticle));
+                if(t.getAnnotation() != null) {
+                	Object annotation = t.getAnnotation().getAnnotation();
+                	if(annotation != null && annotation instanceof BindInfo) {
+                		BindInfo bindInfo = (BindInfo) annotation;
+                		prop.javadoc = bindInfo.getDocumentation();
+                	}
+                }
                 getCurrentBean().addProperty(prop);
             } else {
                 // repeated model groups should have been marked already

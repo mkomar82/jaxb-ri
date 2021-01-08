@@ -47,6 +47,9 @@ abstract class AbstractFieldWithVar extends AbstractField {
             getFieldType(), prop.getName(false) );
 
         annotate(field);
+        if(prop.javadoc != null && !prop.javadoc.trim().isEmpty()) {
+        	field.javadoc().add(prop.javadoc);
+        }
     }
 
     /**
